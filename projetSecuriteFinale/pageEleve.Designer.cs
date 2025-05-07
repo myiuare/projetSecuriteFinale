@@ -46,8 +46,7 @@ namespace projetSecuriteFinale
             this.paramètresToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1924, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1443, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -83,22 +82,20 @@ namespace projetSecuriteFinale
             // 
             this.marie_curie_picturebox.BackgroundImage = global::projetSecuriteFinale.Properties.Resources.lycee_marie;
             this.marie_curie_picturebox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.marie_curie_picturebox.Location = new System.Drawing.Point(363, 430);
-            this.marie_curie_picturebox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.marie_curie_picturebox.Location = new System.Drawing.Point(41, 401);
             this.marie_curie_picturebox.Name = "marie_curie_picturebox";
-            this.marie_curie_picturebox.Size = new System.Drawing.Size(1813, 421);
+            this.marie_curie_picturebox.Size = new System.Drawing.Size(1360, 342);
             this.marie_curie_picturebox.TabIndex = 7;
             this.marie_curie_picturebox.TabStop = false;
             // 
             // pageEleve
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(1924, 1061);
+            this.ClientSize = new System.Drawing.Size(1443, 862);
             this.Controls.Add(this.marie_curie_picturebox);
             this.Controls.Add(this.menuStrip1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "pageEleve";
             this.Text = "pageEleve";
             this.Load += new System.EventHandler(this.pageEleve_Load);

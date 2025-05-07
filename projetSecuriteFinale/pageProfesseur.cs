@@ -21,8 +21,9 @@ namespace projetSecuriteFinale
 
         private void gestionDesÉlèvesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // On crée une nouvelle instance à chaque clic pour éviter une erreur si le formulaire a été fermé.
-           
+            this.Hide();  // Masque la page
+            Form pageDeGestionEleve = new GestionMotdePasse(); // Crée une nouvelle instance de pagemdp
+            pageDeGestionEleve.ShowDialog(); // Ouvre pageDemdp de manière modale           
         }
 
         private void quitterToolStripMenuItem_Click(object sender, EventArgs e)

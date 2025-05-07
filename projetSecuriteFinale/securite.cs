@@ -12,7 +12,7 @@ namespace projetSecuriteFinale
 
     public class Securite
     {
-        private string connectionString = "Server=localhost;Database=nom_de_ta_bdd;Uid=root;Pwd=;";
+        private string connectionString = "Server=localhost;Database=gestion_securite;Uid=root;Pwd=;";
 
         // Bloquer un élève
         public void BloquerEleve(int idEleve)

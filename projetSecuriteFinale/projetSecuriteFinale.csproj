@@ -99,7 +99,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Eleve.cs" />
+    <Compile Include="GenerateurMotDePasse.cs" />
     <Compile Include="GestionEleves.cs" />
+    <Compile Include="GestionMotdePasse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GestionMotdePasse.Designer.cs">
+      <DependentUpon>GestionMotdePasse.cs</DependentUpon>
+    </Compile>
     <Compile Include="pageAccueil.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,6 +140,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="securite.cs" />
+    <EmbeddedResource Include="GestionMotdePasse.resx">
+      <DependentUpon>GestionMotdePasse.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="pageAccueil.resx">
       <DependentUpon>pageAccueil.cs</DependentUpon>
     </EmbeddedResource>

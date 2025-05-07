@@ -11,9 +11,15 @@ namespace projetSecuriteFinale
         public int Id { get; set; }
         public string Nom { get; set; }
         public string Prenom { get; set; }
-        public DateTime DateNaissance { get; set; }
         public string CodeClasse { get; set; }
-        public string PhotoPath { get; set; }  // Chemin de l'image
+        public DateTime DateNaissance { get; set; }
+        public string Email { get; set; }
+        public string PhotoPath { get; set; }
+
+        public bool IsLoginBlocked { get; set; }
+        public string MotDePasse { get; set; }
+
+
 
         public Eleve(int id, string nom, string prenom, DateTime dateNaissance, string codeClasse, string photoPath)
         {
