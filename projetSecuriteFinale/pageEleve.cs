@@ -21,5 +21,10 @@ namespace projetSecuriteFinale
         {
 
         }
+
+        private void gestionDesStagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

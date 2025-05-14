@@ -61,8 +61,9 @@ namespace projetSecuriteFinale
             // gestionDesStagesToolStripMenuItem
             // 
             this.gestionDesStagesToolStripMenuItem.Name = "gestionDesStagesToolStripMenuItem";
-            this.gestionDesStagesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.gestionDesStagesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.gestionDesStagesToolStripMenuItem.Text = "Gestion des stages";
+            this.gestionDesStagesToolStripMenuItem.Click += new System.EventHandler(this.gestionDesStagesToolStripMenuItem_Click);
             // 
             // paramètresToolStripMenuItem
             // 

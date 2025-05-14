@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using projetSecuriteFinale;
 using System.IO;
+using System.Net.Mail;
+using System.Security.Cryptography;
+
 
 
 namespace projetSecuriteFinale
@@ -168,46 +171,71 @@ namespace projetSecuriteFinale
 
             Eleve eleve = listeEleves[index];
 
-            if (radioBloquerLogin.Checked)
+            try
             {
-                eleve.IsLoginBlocked = true;
-                GestionEleves gestionEleves = new GestionEleves();
-                gestionEleves.UpdateEleve(eleve);
-                MessageBox.Show($"Login de {eleve.Prenom} {eleve.Nom} bloqué.");
-           
-                MailSender.EnvoyerMailRenouvellement(eleve.Email);
-                MessageBox.Show("Mail de renouvellement envoyé.");
-            }
-            else if (radioAvertissement.Checked)
-            {
-                MailSender.EnvoyerMailAvertissement(eleve.Email);
-                MessageBox.Show("Mail d'avertissement envoyé.");
-            }
-            else if (radioChangerMDP.Checked)
-            {
-                string nouveauMDP = GenerateurMotDePasse.Generer();
-                eleve.MotDePasse = Hash(nouveauMDP);
-                GestionEleves gestionEleves = new GestionEleves();
-                gestionEleves.UpdateEleve(eleve);
-                MessageBox.Show($"Mot de passe changé : {nouveauMDP}");
-            }
-            else if (radioSupprimer.Checked)
-            {
-                var confirm = MessageBox.Show($"Supprimer {eleve.Prenom} {eleve.Nom} ?", "Confirmation", MessageBoxButtons.YesNo);
-                if (confirm == DialogResult.Yes)
+                // Vérifier quel radioButton est sélectionné pour effectuer l'action correspondante
+                if (radioBloquerLogin.Checked)
                 {
+                    eleve.IsLoginBlocked = true;
                     GestionEleves gestionEleves = new GestionEleves();
-                    gestionEleves.SupprimerEleve(eleve.Id);
-                    comboBoxEleves.Items.RemoveAt(index);
-                    listeEleves.RemoveAt(index);
-                    MessageBox.Show("Élève supprimé.");
+                    gestionEleves.UpdateEleve(eleve);
+                    MessageBox.Show($"Login de {eleve.Prenom} {eleve.Nom} bloqué.");
+
+                    // Envoi du mail de renouvellement
+                    try
+                    {
+                        MailSender.EnvoyerMailRenouvellement(eleve.Email);
+                        MessageBox.Show("Mail de renouvellement envoyé.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erreur lors de l'envoi du mail de renouvellement : {ex.Message}");
+                    }
+                }
+                else if (radioAvertissement.Checked)
+                {
+                    // Envoi du mail d'avertissement
+                    try
+                    {
+                        MailSender.EnvoyerMailAvertissement(eleve.Email);
+                        MessageBox.Show("Mail d'avertissement envoyé.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erreur lors de l'envoi du mail d'avertissement : {ex.Message}");
+                    }
+                }
+                else if (radioChangerMDP.Checked)
+                {
+                    string nouveauMDP = GenerateurMotDePasse.Generer();
+                    eleve.MotDePasse = PasswordUtils.Hash(nouveauMDP);
+                    GestionEleves gestionEleves = new GestionEleves();
+                    gestionEleves.UpdateEleve(eleve);
+                    MessageBox.Show($"Mot de passe changé : {nouveauMDP}");
+                }
+                else if (radioSupprimer.Checked)
+                {
+                    var confirm = MessageBox.Show($"Supprimer {eleve.Prenom} {eleve.Nom} ?", "Confirmation", MessageBoxButtons.YesNo);
+                    if (confirm == DialogResult.Yes)
+                    {
+                        GestionEleves gestionEleves = new GestionEleves();
+                        gestionEleves.SupprimerEleve(eleve.Id);
+                        comboBoxEleves.Items.RemoveAt(index);
+                        listeEleves.RemoveAt(index);
+                        MessageBox.Show("Élève supprimé.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Veuillez sélectionner une action.");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Veuillez sélectionner une action.");
+                // Gestion des exceptions globales pour capturer toute erreur inattendue
+                MessageBox.Show($"Erreur : {ex.Message}");
             }
         }
     }
-    }
 }
+

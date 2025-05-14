@@ -99,7 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Eleve.cs" />
-    <Compile Include="GenerateurMotDePasse.cs" />
     <Compile Include="GestionEleves.cs" />
     <Compile Include="GestionMotdePasse.cs">
       <SubType>Form</SubType>
