@@ -50,39 +50,15 @@ namespace projetSecuriteFinale
         // Utilitaires pour le hashage des mots de passe
         public static class PasswordUtils
         {
-            public static string GenererSel()
+            public static string Hash(string motDePasse)
             {
-                byte[] selBytes = new byte[16];
-                using (var rng = new RNGCryptoServiceProvider())
-                {
-                    rng.GetBytes(selBytes);
-                }
-                return Convert.ToBase64String(selBytes);
-            }
-
-            public static string HashMotDePasse(string motDePasse, string selBase64)
-            {
-                byte[] selBytes = Convert.FromBase64String(selBase64);
-                byte[] mdpBytes = Encoding.UTF8.GetBytes(motDePasse);
-
-                byte[] mdpAvecSel = new byte[selBytes.Length + mdpBytes.Length];
-                Buffer.BlockCopy(selBytes, 0, mdpAvecSel, 0, selBytes.Length);
-                Buffer.BlockCopy(mdpBytes, 0, mdpAvecSel, selBytes.Length, mdpBytes.Length);
-
                 using (SHA256 sha256 = SHA256.Create())
                 {
-                    byte[] hash = sha256.ComputeHash(mdpAvecSel);
-                    return Convert.ToBase64String(hash);
+                    byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(motDePasse));
+                    return BitConverter.ToString(bytes).Replace("-", "").ToLower();
                 }
             }
-
-            public static bool VerifierMotDePasse(string motDePasseSaisi, string selBase64, string hashStocke)
-            {
-                string hashCalcule = HashMotDePasse(motDePasseSaisi, selBase64);
-                return hashCalcule == hashStocke;
-            }
         }
-
 
         // Classe pour envoyer des mails
         public static class MailSender

@@ -33,7 +33,18 @@ namespace projetSecuriteFinale
         {
             string log = log_connex.Text;
             string motDepass = mdp_connex.Text;
-           
+            string roleSelectionne = ""; // "eleve" ou "professeur" selon le choix de l'utilisateur
+            if (rad_eleve.Checked)
+            {
+                roleSelectionne = "eleve";
+            }
+            else if (rad_prof.Checked)
+            {
+                roleSelectionne = "professeur";
+            }else if (rad_admin.Checked)
+            {
+                roleSelectionne = "administrateur";
+            }
 
             // Connexion à la base de données MySQL
             MySqlConnection utilisateur = new MySqlConnection("database=gestion_securite; server=localhost; user id=root; mdp=");
@@ -42,11 +53,12 @@ namespace projetSecuriteFinale
             {
                 utilisateur.Open();
                 // On va maintenant vérifier le rôle et les informations de connexion dans la base de données
-                string query = "SELECT * FROM utilisateur WHERE email = @email AND mot_de_passe = @mdp";
+                string query = "SELECT * FROM utilisateur WHERE email = @email AND mot_de_passe = @mdp AND role = @role";
                 MySqlCommand cmd = new MySqlCommand(query, utilisateur);
 
                 cmd.Parameters.AddWithValue("@email", log);
                 cmd.Parameters.AddWithValue("@mdp", motDepass);
+                cmd.Parameters.AddWithValue("@role", roleSelectionne); // On passe le rôle sélectionné
 
                 MySqlDataReader recherche_connexion = cmd.ExecuteReader();
 
@@ -79,7 +91,7 @@ namespace projetSecuriteFinale
                 else
                 {
                     // Si l'utilisateur ne correspond pas à la base de données ou au rôle choisi
-                    MessageBox.Show("Erreur : l'utilisateur ne correspondent pas dans la base de données.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Erreur : l'utilisateur ou le rôle ne correspondent pas dans la base de données.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     utilisateur.Close();
                 }
 
@@ -89,23 +101,14 @@ namespace projetSecuriteFinale
                 // Si une erreur de connexion à la base de données se produit
                 MessageBox.Show("Erreur de connexion : " + ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        
-            }
+        }
+
         private void pageConnex_Load(object sender, EventArgs e)
         {
 
         }
-
-       
-            private void btnOuvrirReinitialisation_Click(object sender, EventArgs e)
-            {
-                FormReinitialisation form = new FormReinitialisation();
-                form.ShowDialog();
-            }
-
-        }
     }
-
+}
 
 
 
