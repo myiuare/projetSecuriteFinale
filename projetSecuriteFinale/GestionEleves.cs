@@ -21,7 +21,7 @@ namespace projetSecuriteFinale
                 {
                     conn.Open();
 
-                    string query = "SELECT id_utilisateur, nom, prenom, date_naissance, Code_classe FROM utilisateur WHERE role = 'eleve'";
+                    string query = "SELECT id_utilisateur, nom, prenom, date_naissance, Code_classe, photo_path, email, sel, reset_token, reset_token_expiration FROM utilisateur WHERE role = 'eleve'";
 
                     if (filtres != null && filtres.Count > 0)
                     {
@@ -49,17 +49,23 @@ namespace projetSecuriteFinale
                     while (reader.Read())
                     {
                         // Assigner correctement le chemin de la photo (photo_path) récupéré depuis la base de données
+                        string email = reader["email"] != DBNull.Value ? reader["email"].ToString() : string.Empty;
                         string photoPath = reader["photo_path"] != DBNull.Value ? reader["photo_path"].ToString() : string.Empty;
 
                         // Créer l'objet Eleve avec le chemin de la photo
                         Eleve eleve = new Eleve(
-                            Convert.ToInt32(reader["id_utilisateur"]),
-                            reader["nom"].ToString(),
-                            reader["prenom"].ToString(),
-                            Convert.ToDateTime(reader["date_naissance"]),
-                            reader["Code_classe"].ToString(),
-                            photoPath // Photo path récupéré depuis la base de données
-                        );
+                         Convert.ToInt32(reader["id_utilisateur"]),
+                         reader["nom"].ToString(),
+                         reader["prenom"].ToString(),
+                         Convert.ToDateTime(reader["date_naissance"]),
+                         reader["Code_classe"].ToString(),
+                         photoPath,
+                         email,
+                         reader["sel"].ToString(),
+                         reader["reset_token"]?.ToString(),
+                         reader["reset_token_expiration"] == DBNull.Value ? null : (DateTime?)reader["reset_token_expiration"]
+                     );
+
 
                         listeEleves.Add(eleve);
                     }
@@ -120,6 +126,7 @@ namespace projetSecuriteFinale
                 throw new Exception("Erreur lors de la suppression de l'élève : " + ex.Message);
             }
         }
+
 
 
     }

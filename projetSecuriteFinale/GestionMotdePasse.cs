@@ -11,68 +11,57 @@ using projetSecuriteFinale;
 using System.IO;
 using System.Net.Mail;
 using System.Security.Cryptography;
-
-
+using System.Configuration;
+using System.Net;
+using static projetSecuriteFinale.Securite;
 
 namespace projetSecuriteFinale
 {
     public partial class GestionMotdePasse : Form
     {
-        // Déclare une variable globale pour stocker la liste d'élèves récupérés
         private List<Eleve> listeEleves = new List<Eleve>();
 
         public GestionMotdePasse()
         {
             InitializeComponent();
             comboBoxEleves.SelectedIndexChanged += comboBoxEleves_SelectedIndexChanged;
-
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-
         }
-        // Méthode appelée lorsqu'on clique sur le bouton pour afficher les élèves
+
         private void button2_Click(object sender, EventArgs e)
         {
             try
             {
-                // Liste des filtres sélectionnés
                 List<string> filtres = new List<string>();
 
-                // Ajouter les filtres en fonction des cases à cocher
-                if (checkBox1.Checked)
+                if (radioButton1.Checked)
                     filtres.Add("90j");
 
-                if (checkBox6.Checked)
+                if (radioButton2.Checked)
                     filtres.Add("55j");
 
-                if (checkBox9.Checked)
+                if (radioButton3.Checked)
                     filtres.Add("ok");
 
-                // Si aucun filtre n'est sélectionné, afficher un message d'erreur
                 if (filtres.Count == 0)
                 {
                     MessageBox.Show("Veuillez cocher au moins un filtre.");
                     return;
                 }
 
-                // Créer une instance de GestionEleves pour récupérer les élèves avec les filtres appliqués
                 GestionEleves gestionEleves = new GestionEleves();
-
-                // Appeler la méthode GetEleves pour obtenir la liste des élèves selon les filtres sélectionnés
                 listeEleves = gestionEleves.GetEleves(filtres);
 
-                // Effacer les éléments précédemment ajoutés dans la ComboBox
                 comboBoxEleves.Items.Clear();
 
-                // Ajouter chaque élève dans la ComboBox sous la forme "Prénom Nom"
                 foreach (var eleve in listeEleves)
                 {
                     comboBoxEleves.Items.Add($"{eleve.Prenom} {eleve.Nom}");
                 }
 
-                // Si des élèves sont trouvés, sélectionner le premier élément
                 if (comboBoxEleves.Items.Count > 0)
                     comboBoxEleves.SelectedIndex = 0;
                 else
@@ -80,63 +69,39 @@ namespace projetSecuriteFinale
             }
             catch (Exception ex)
             {
-                // Si une erreur se produit, afficher un message d'erreur
                 MessageBox.Show("Erreur : " + ex.Message);
             }
         }
 
-        // Méthode appelée lorsqu'on change de sélection dans la ComboBox pour afficher les détails de l'élève
         private void comboBoxEleves_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Vérifier que l'index sélectionné est valide
             int index = comboBoxEleves.SelectedIndex;
 
-            // Si l'index est valide (c'est-à-dire dans la plage de la liste d'élèves)
             if (index >= 0 && index < listeEleves.Count)
             {
-                // Récupérer l'élève sélectionné dans la liste
                 Eleve eleve = listeEleves[index];
 
-                // Mettre à jour les labels pour afficher les informations de l'élève
                 labelNom.Text = "Nom : " + eleve.Nom;
                 labelPrenom.Text = "Prénom : " + eleve.Prenom;
                 labelClasse.Text = "Classe : " + eleve.CodeClasse;
                 labelDateNaissance.Text = "Date de naissance : " + eleve.DateNaissance.ToShortDateString();
 
-                // Vérifie si le chemin de la photo est valide
                 if (!string.IsNullOrEmpty(eleve.PhotoPath))
                 {
                     try
                     {
-                        // Vérifier si l'URL est valide (pas nécessaire ici car tu utilises un chemin local)
-                        if (Uri.IsWellFormedUriString(eleve.PhotoPath, UriKind.Absolute))  // Si c'est une URL
+                        if (Uri.IsWellFormedUriString(eleve.PhotoPath, UriKind.Absolute))
                         {
-                            Console.WriteLine("URL valide trouvée : " + eleve.PhotoPath);  // Message de débogage
-                            try
-                            {
-                                // Télécharger l'image depuis l'URL et l'afficher dans la PictureBox
-                                pictureBoxEleve.Image = Image.FromStream(new System.Net.WebClient().OpenRead(eleve.PhotoPath));
-                            }
-                            catch (Exception ex)
-                            {
-                                // Si l'image ne peut pas être téléchargée, afficher une image par défaut
-                                pictureBoxEleve.Image = null; // ou une image par défaut
-                                MessageBox.Show("Erreur lors du téléchargement de l'image : " + ex.Message);
-                            }
+                            pictureBoxEleve.Image = Image.FromStream(new System.Net.WebClient().OpenRead(eleve.PhotoPath));
                         }
                         else
                         {
-                            // Si c'est un chemin local
-                            Console.WriteLine("Chemin local trouvé : " + eleve.PhotoPath);  // Message de débogage
-                                                                                            // Vérifier si le fichier existe réellement
                             if (File.Exists(eleve.PhotoPath))
                             {
-                                Console.WriteLine("Fichier trouvé localement : " + eleve.PhotoPath);  // Message de débogage
                                 pictureBoxEleve.Image = Image.FromFile(eleve.PhotoPath);
                             }
                             else
                             {
-                                // Afficher une erreur si le fichier n'existe pas
                                 MessageBox.Show("Le fichier d'image n'existe pas à cet emplacement : " + eleve.PhotoPath);
                                 pictureBoxEleve.Image = null;
                             }
@@ -149,14 +114,13 @@ namespace projetSecuriteFinale
                 }
                 else
                 {
-                    pictureBoxEleve.Image = null;  // Afficher une image par défaut si aucun chemin n'est fourni
+                    pictureBoxEleve.Image = null;
                 }
             }
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -173,47 +137,90 @@ namespace projetSecuriteFinale
 
             try
             {
-                // Vérifier quel radioButton est sélectionné pour effectuer l'action correspondante
                 if (radioBloquerLogin.Checked)
                 {
-                    eleve.IsLoginBlocked = true;
-                    GestionEleves gestionEleves = new GestionEleves();
-                    gestionEleves.UpdateEleve(eleve);
-                    MessageBox.Show($"Login de {eleve.Prenom} {eleve.Nom} bloqué.");
+                    try
+                    {
+                        string email = ConfigurationManager.AppSettings["email"];
+                        string motDePasse = ConfigurationManager.AppSettings["mdp"];
 
-                    // Envoi du mail de renouvellement
-                    try
-                    {
-                        MailSender.EnvoyerMailRenouvellement(eleve.Email);
-                        MessageBox.Show("Mail de renouvellement envoyé.");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Erreur lors de l'envoi du mail de renouvellement : {ex.Message}");
-                    }
-                }
-                else if (radioAvertissement.Checked)
-                {
-                    // Envoi du mail d'avertissement
-                    try
-                    {
-                        MailSender.EnvoyerMailAvertissement(eleve.Email);
-                        MessageBox.Show("Mail d'avertissement envoyé.");
+                        MailMessage mail = new MailMessage();
+                        mail.From = new MailAddress(email);
+                        if (string.IsNullOrWhiteSpace(eleve.Email))
+                        {
+                            MessageBox.Show("L'élève sélectionné n'a pas d'adresse email valide.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        mail.To.Add(eleve.Email);
+                        mail.Subject = "Alerte mot de passe";
+                        mail.Body = "Bonjour, votre mot de passe dépasse les 90 jours.";
+
+                        SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                        client.EnableSsl = true;
+                        client.Credentials = new NetworkCredential(email, motDePasse);
+                        client.Send(mail);
+
+                        MessageBox.Show("Email envoyé avec succès !");
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show($"Erreur lors de l'envoi du mail d'avertissement : {ex.Message}");
                     }
                 }
-                else if (radioChangerMDP.Checked)
+                else if (radioAvertissement.Checked)
                 {
-                    string nouveauMDP = GenerateurMotDePasse.Generer();
-                    eleve.MotDePasse = PasswordUtils.Hash(nouveauMDP);
-                    GestionEleves gestionEleves = new GestionEleves();
-                    gestionEleves.UpdateEleve(eleve);
-                    MessageBox.Show($"Mot de passe changé : {nouveauMDP}");
+                    try
+                    {
+                        if (string.IsNullOrWhiteSpace(eleve.Email))
+                        {
+                            MessageBox.Show("L'élève sélectionné n'a pas d'adresse email valide.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                       
+                        
+
+                        string token = Guid.NewGuid().ToString();
+                        DateTime expiration = DateTime.Now.AddHours(1);
+
+                        // Appel à ta DAL pour sauvegarder le token + expiration
+                        UtilisateurDAO.MettreAJourResetToken(eleve.Id, token, expiration);
+
+                        string corps = $"Bonjour,\n\nVotre mot de passe dépasse les 90 jours.\n\n" +
+                                       $"Pour réinitialiser votre mot de passe, ouvrez l'application, cliquez sur 'Réinitialiser mot de passe', puis entrez ce code unique : {token}\n\n" +
+                                       $"Ce code expire dans 1 heure.";
+
+                        MessageBox.Show("Lien de réinitialisation envoyé par email.");
+                        EmailUtils.EnvoyerMail(
+                         eleve.Email,
+                         "Réinitialisation de mot de passe",
+                         corps
+                     );
+
+
+
+
+
+
+                        MessageBox.Show("Email envoyé avec succès !");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erreur lors de l'envoi de l'email : {ex.Message}");
+                    }
+
                 }
-                else if (radioSupprimer.Checked)
+                //else if (radioChangerMDP.Checked)
+                //{
+                //        string nouveauMDP = GenerateurMotDePasse.Generer(); // Génère un mdp aléatoire
+                //        eleve.MotDePasse = PasswordUtils.Hash(nouveauMDP);  // Hash ce mdp
+                //        GestionEleves gestionEleves = new GestionEleves();
+                //        gestionEleves.UpdateEleve(eleve);                   // Mets à jour en base avec le hash
+                //        MessageBox.Show($"Mot de passe changé : {nouveauMDP}"); // Affiche le mdp en clair à l'utilisateur
+                //    }
+
+                    else if (radioSupprimer.Checked)
                 {
                     var confirm = MessageBox.Show($"Supprimer {eleve.Prenom} {eleve.Nom} ?", "Confirmation", MessageBoxButtons.YesNo);
                     if (confirm == DialogResult.Yes)
@@ -232,9 +239,18 @@ namespace projetSecuriteFinale
             }
             catch (Exception ex)
             {
-                // Gestion des exceptions globales pour capturer toute erreur inattendue
                 MessageBox.Show($"Erreur : {ex.Message}");
             }
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

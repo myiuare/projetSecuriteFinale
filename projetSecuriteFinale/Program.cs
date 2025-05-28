@@ -17,6 +17,7 @@ namespace projetSecuriteFinale
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new pagedeChoix());
+            Application.Run(new GestionMotdePasse());
         }
     }
 }
