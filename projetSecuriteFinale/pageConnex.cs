@@ -3,7 +3,6 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;  // Pour File.Exists
 
 namespace projetSecuriteFinale
 {
@@ -14,22 +13,9 @@ namespace projetSecuriteFinale
             InitializeComponent();
         }
 
-        // Fonction pour hasher le mot de passe en SHA256
-        public static string HashMotDePasse(string motDePasse)
+        private void pageConnex_Load(object sender, EventArgs e)
         {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] bytes = Encoding.UTF8.GetBytes(motDePasse);
-                byte[] hash = sha256.ComputeHash(bytes);
-                StringBuilder builder = new StringBuilder();
-                foreach (byte b in hash)
-                {
-                    builder.Append(b.ToString("x2"));
-                }
-                return builder.ToString();
-            }
         }
-        
 
         private void buttonReChoix_Click(object sender, EventArgs e)
         {
@@ -47,60 +33,52 @@ namespace projetSecuriteFinale
                 return;
             }
 
-            // Hash du mot de passe saisi
-            string motDepassHashe = HashMotDePasse(motDepass);
-
-            string connectionString = "server=localhost; database=gestion_securite; uid=root; pwd=";
-
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                if (VerifierConnexion(log, motDepass))
                 {
-                    conn.Open();
-
-                    string query = "SELECT * FROM utilisateur WHERE email = @email AND mot_de_passe = @mdp";
-
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@email", log);
-                    cmd.Parameters.AddWithValue("@mdp", motDepassHashe);
-
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    using (MySqlConnection conn = new MySqlConnection("server=localhost; database=gestion_securite; uid=root; pwd="))
                     {
-                        if (reader.Read())
+                        conn.Open();
+
+                        string query = "SELECT role FROM utilisateur WHERE email = @mail";
+                        MySqlCommand cmd = new MySqlCommand(query, conn);
+                        cmd.Parameters.AddWithValue("@mail", log);
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            string role = reader["role"].ToString();
-
-                            MessageBox.Show("Connexion réussie !", "Bienvenue", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            this.Hide();
-
-                            if (role == "eleve")
+                            if (reader.Read())
                             {
-                                Form pageEleve = new pageEleve();
-                                pageEleve.ShowDialog();
-                            }
-                            else if (role == "professeur")
-                            {
-                                Form pageProf = new pageProfesseur();
-                                pageProf.ShowDialog();
-                            }
-                            else if (role == "administrateur")
-                            {
-                                Form pageAdmin = new pageAccueil();
-                                pageAdmin.ShowDialog();
-                            }
-                            else
-                            {
-                                MessageBox.Show("Rôle non reconnu. Veuillez contacter l’administrateur.", "Erreur rôle", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
+                                string role = reader["role"].ToString();
+                                MessageBox.Show("Connexion réussie !", "Bienvenue", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            this.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Identifiants incorrects.", "Erreur de connexion", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                this.Hide();
+
+                                if (role == "eleve")
+                                {
+                                    new pageEleve().ShowDialog();
+                                }
+                                else if (role == "professeur")
+                                {
+                                    new pageProfesseur().ShowDialog();
+                                }
+                                else if (role == "administrateur")
+                                {
+                                    new pageAccueil().ShowDialog();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Rôle non reconnu. Veuillez contacter l’administrateur.", "Erreur rôle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+
+                                this.Show();
+                            }
                         }
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Identifiants incorrects.", "Erreur de connexion", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
@@ -109,26 +87,67 @@ namespace projetSecuriteFinale
             }
         }
 
-        private void pageConnex_Load(object sender, EventArgs e)
-        {
-        }
-
         private void btnMigrate_Click(object sender, EventArgs e)
         {
-            
-                MigratePasswords.UpdatePasswordsToHash();
-                MessageBox.Show("Migration terminée !");
-            
+            MigratePasswords.UpdatePasswordsToHash();
+            MessageBox.Show("Migration terminée !");
         }
 
         private void buttonReinitialiserMDP_Click(object sender, EventArgs e)
         {
-            // Instancie le formulaire de réinitialisation
             FormReinitialisation formReset = new FormReinitialisation();
-
-            // Affiche-le en modal (empêche d'interagir avec le formulaire parent tant que c'est ouvert)
             formReset.ShowDialog();
+        }
 
+        private void mdp_connex_TextChanged(object sender, EventArgs e)
+        {
+            // Événement inutilisé actuellement
+        }
+
+        // Appelle une méthode déjà sécurisée, mais tu peux aussi déplacer celle-ci dans une classe Utils
+        public static bool VerifierConnexion(string email, string motDePasse)
+        {
+            string connectionString = "server=localhost; database=gestion_securite; uid=root; pwd=";
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = "SELECT mot_de_passe, sel FROM utilisateur WHERE email = @mail AND is_active = 1";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@mail", email);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        string hashEnBase = reader["mot_de_passe"].ToString();
+                        string sel = reader["sel"].ToString();
+
+                        string hashEntre = HashMotDePasseAvecSel(motDePasse, sel);
+
+                        return hashEnBase == hashEntre;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        // Fonction pour hasher avec un sel
+        public static string HashMotDePasseAvecSel(string motDePasse, string sel)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] inputBytes = Encoding.UTF8.GetBytes(motDePasse + sel);
+                byte[] hash = sha256.ComputeHash(inputBytes);
+                StringBuilder sb = new StringBuilder();
+                foreach (byte b in hash)
+                {
+                    sb.Append(b.ToString("x2"));
+                }
+                return sb.ToString();
+            }
         }
     }
 }

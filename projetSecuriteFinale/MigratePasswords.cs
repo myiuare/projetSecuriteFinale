@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using projetSecuriteFinale;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -24,14 +25,15 @@ public class MigratePasswords
 
     public static void UpdatePasswordsToHash()
     {
+
         string connectionString = "server=localhost; database=gestion_securite; uid=root; pwd=";
 
         using (MySqlConnection conn = new MySqlConnection(connectionString))
         {
             conn.Open();
 
-            // Récupère tous les utilisateurs et leurs mots de passe
-            string selectQuery = "SELECT id_utilisateur, mot_de_passe FROM utilisateur";
+            // Récupérer les utilisateurs qui n'ont pas encore de sel
+            string selectQuery = "SELECT id_utilisateur, mot_de_passe FROM utilisateur WHERE sel IS NULL OR sel = ''";
             MySqlCommand selectCmd = new MySqlCommand(selectQuery, conn);
 
             List<(int id, string mdp)> utilisateurs = new List<(int, string)>();
@@ -44,17 +46,22 @@ public class MigratePasswords
                 }
             }
 
-            // Pour chaque utilisateur, on hash le mot de passe clair et on met à jour
             foreach (var user in utilisateurs)
             {
-                string mdpHash = HashMotDePasse(user.mdp);
+                string sel = UtilsMotDePasse.GenererSel(); // Génère un sel aléatoire
+                string hash = UtilsMotDePasse.HashMotDePasse(user.mdp, sel); // SHA256(mdp + sel)
 
-                string updateQuery = "UPDATE utilisateur SET mot_de_passe = @mdpHash WHERE id_utilisateur = @id";
+                string updateQuery = "UPDATE utilisateur SET mot_de_passe = @hash, sel = @sel WHERE id_utilisateur = @id";
                 MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn);
-                updateCmd.Parameters.AddWithValue("@mdpHash", mdpHash);
+                updateCmd.Parameters.AddWithValue("@hash", hash);
+                updateCmd.Parameters.AddWithValue("@sel", sel);
                 updateCmd.Parameters.AddWithValue("@id", user.id);
+
                 updateCmd.ExecuteNonQuery();
             }
         }
     }
+
 }
+
+

@@ -45,3 +45,4 @@ D:\bts sio\2TSSIO\projetSecuriteFinale\projetSecuriteFinale\bin\Debug\System.Thr
 D:\bts sio\2TSSIO\projetSecuriteFinale\projetSecuriteFinale\obj\Debug\projetSecuriteFinale.exe
 D:\bts sio\2TSSIO\projetSecuriteFinale\projetSecuriteFinale\obj\Debug\projetSecuriteFinale.pdb
 D:\bts sio\2TSSIO\projetSecuriteFinale\projetSecuriteFinale\obj\Debug\projetSecuriteFinale.GestionMotdePasse.resources
+D:\bts sio\2TSSIO\projetSecuriteFinale\projetSecuriteFinale\obj\Debug\projetSecuriteFinale.FormReinitialisation.resources

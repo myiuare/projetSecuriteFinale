@@ -20,11 +20,10 @@ public static class UtilisateurDAO
         return Convert.ToBase64String(tokenData).Replace("+", "-").Replace("/", "_").Replace("=", "");
     }
 
-    /// <summary>
+   
     /// Crée un token de réinitialisation, le stocke en base avec expiration (1h), et retourne le token.
-    /// </summary>
-    /// <param name="idUtilisateur">ID de l'utilisateur pour qui on crée le token</param>
-    /// <returns>Le token généré</returns>
+  
+ 
     public static string CreerEtStockerResetToken(int idUtilisateur)
     {
         string token = GenererToken();
@@ -44,11 +43,8 @@ public static class UtilisateurDAO
         return token; // On retourne le token pour pouvoir l’envoyer par mail
     }
 
-    /// <summary>
     /// Récupère un utilisateur par son adresse mail
-    /// </summary>
-    /// <param name="email">Adresse email à rechercher</param>
-    /// <returns>Objet Eleve ou null si non trouvé</returns>
+   
     public static Eleve ObtenirParEmail(string email)
     {
         using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -75,11 +71,7 @@ public static class UtilisateurDAO
         return null; // Utilisateur non trouvé
     }
 
-    /// <summary>
     /// Récupère un utilisateur à partir d'un token de réinitialisation
-    /// </summary>
-    /// <param name="token">Le token de reset</param>
-    /// <returns>Objet Eleve ou null</returns>
     public static Eleve ObtenirParToken(string token)
     {
         using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -106,9 +98,8 @@ public static class UtilisateurDAO
         return null; // Token invalide ou non trouvé
     }
 
-    /// <summary>
     /// Met à jour le mot de passe hashé, le sel, la date de changement, et expiration
-    /// </summary>
+ 
     public static void MettreAJourMotDePasse(int id, string hash, string sel)
     {
         using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -125,9 +116,7 @@ public static class UtilisateurDAO
         }
     }
 
-    /// <summary>
     /// Invalide un token de reset (après usage)
-    /// </summary>
     public static void InvaliderResetToken(string token)
     {
         using (MySqlConnection conn = new MySqlConnection(connectionString))
