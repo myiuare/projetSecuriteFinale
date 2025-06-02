@@ -39,27 +39,19 @@ namespace projetSecuriteFinale
             this.button3 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.radioSupprimer = new System.Windows.Forms.RadioButton();
-            this.radioChangerMDP = new System.Windows.Forms.RadioButton();
             this.radioAvertissement = new System.Windows.Forms.RadioButton();
             this.radioBloquerLogin = new System.Windows.Forms.RadioButton();
             this.comboBoxEleves = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.checkBox10 = new System.Windows.Forms.CheckBox();
-            this.checkBox11 = new System.Windows.Forms.CheckBox();
-            this.checkBox12 = new System.Windows.Forms.CheckBox();
-            this.checkBox7 = new System.Windows.Forms.CheckBox();
-            this.checkBox8 = new System.Windows.Forms.CheckBox();
-            this.checkBox9 = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.checkBox6 = new System.Windows.Forms.CheckBox();
+            this.radioButton5 = new System.Windows.Forms.RadioButton();
+            this.radioButton6 = new System.Windows.Forms.RadioButton();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.button2 = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -74,7 +66,6 @@ namespace projetSecuriteFinale
             this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Controls.Add(this.button1);
             this.groupBox2.Controls.Add(this.radioSupprimer);
-            this.groupBox2.Controls.Add(this.radioChangerMDP);
             this.groupBox2.Controls.Add(this.radioAvertissement);
             this.groupBox2.Controls.Add(this.radioBloquerLogin);
             this.groupBox2.Controls.Add(this.comboBoxEleves);
@@ -83,6 +74,7 @@ namespace projetSecuriteFinale
             this.groupBox2.Size = new System.Drawing.Size(625, 626);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
+            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // groupBox3
             // 
@@ -142,9 +134,11 @@ namespace projetSecuriteFinale
             // 
             // pictureBoxEleve
             // 
+            this.pictureBoxEleve.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBoxEleve.Location = new System.Drawing.Point(300, 19);
             this.pictureBoxEleve.Name = "pictureBoxEleve";
             this.pictureBoxEleve.Size = new System.Drawing.Size(106, 141);
+            this.pictureBoxEleve.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxEleve.TabIndex = 0;
             this.pictureBoxEleve.TabStop = false;
             // 
@@ -159,6 +153,7 @@ namespace projetSecuriteFinale
             this.button3.TabIndex = 21;
             this.button3.Text = "Annuler";
             this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button1
             // 
@@ -178,26 +173,13 @@ namespace projetSecuriteFinale
             this.radioSupprimer.AutoSize = true;
             this.radioSupprimer.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioSupprimer.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radioSupprimer.Location = new System.Drawing.Point(28, 415);
+            this.radioSupprimer.Location = new System.Drawing.Point(28, 398);
             this.radioSupprimer.Name = "radioSupprimer";
             this.radioSupprimer.Size = new System.Drawing.Size(347, 23);
             this.radioSupprimer.TabIndex = 4;
             this.radioSupprimer.TabStop = true;
             this.radioSupprimer.Text = "Supprimer de la base de donnée ?\r\n";
             this.radioSupprimer.UseVisualStyleBackColor = true;
-            // 
-            // radioChangerMDP
-            // 
-            this.radioChangerMDP.AutoSize = true;
-            this.radioChangerMDP.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioChangerMDP.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radioChangerMDP.Location = new System.Drawing.Point(28, 392);
-            this.radioChangerMDP.Name = "radioChangerMDP";
-            this.radioChangerMDP.Size = new System.Drawing.Size(387, 23);
-            this.radioChangerMDP.TabIndex = 3;
-            this.radioChangerMDP.TabStop = true;
-            this.radioChangerMDP.Text = "changer le mot de passe de l\'élève ?";
-            this.radioChangerMDP.UseVisualStyleBackColor = true;
             // 
             // radioAvertissement
             // 
@@ -240,136 +222,94 @@ namespace projetSecuriteFinale
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.DarkSlateBlue;
-            this.groupBox1.Controls.Add(this.checkBox10);
-            this.groupBox1.Controls.Add(this.checkBox11);
-            this.groupBox1.Controls.Add(this.checkBox12);
-            this.groupBox1.Controls.Add(this.checkBox7);
-            this.groupBox1.Controls.Add(this.checkBox8);
-            this.groupBox1.Controls.Add(this.checkBox9);
-            this.groupBox1.Controls.Add(this.checkBox4);
-            this.groupBox1.Controls.Add(this.checkBox5);
-            this.groupBox1.Controls.Add(this.checkBox6);
+            this.groupBox1.Controls.Add(this.radioButton5);
+            this.groupBox1.Controls.Add(this.radioButton6);
+            this.groupBox1.Controls.Add(this.radioButton3);
+            this.groupBox1.Controls.Add(this.radioButton2);
+            this.groupBox1.Controls.Add(this.radioButton4);
+            this.groupBox1.Controls.Add(this.radioButton1);
             this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.checkBox3);
-            this.groupBox1.Controls.Add(this.checkBox2);
-            this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(42, 66);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(540, 626);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
-            // checkBox10
+            // radioButton5
             // 
-            this.checkBox10.AutoSize = true;
-            this.checkBox10.Font = new System.Drawing.Font("Noto Mono", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox10.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBox10.Location = new System.Drawing.Point(342, 504);
-            this.checkBox10.Name = "checkBox10";
-            this.checkBox10.Size = new System.Drawing.Size(90, 19);
-            this.checkBox10.TabIndex = 28;
-            this.checkBox10.Text = "Les deux";
-            this.checkBox10.UseVisualStyleBackColor = true;
+            this.radioButton5.AutoSize = true;
+            this.radioButton5.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.radioButton5.Location = new System.Drawing.Point(260, 492);
+            this.radioButton5.Name = "radioButton5";
+            this.radioButton5.Size = new System.Drawing.Size(45, 17);
+            this.radioButton5.TabIndex = 25;
+            this.radioButton5.TabStop = true;
+            this.radioButton5.Text = "Non";
+            this.radioButton5.UseVisualStyleBackColor = true;
             // 
-            // checkBox11
+            // radioButton6
             // 
-            this.checkBox11.AutoSize = true;
-            this.checkBox11.Font = new System.Drawing.Font("Noto Mono", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox11.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBox11.Location = new System.Drawing.Point(211, 504);
-            this.checkBox11.Name = "checkBox11";
-            this.checkBox11.Size = new System.Drawing.Size(50, 19);
-            this.checkBox11.TabIndex = 27;
-            this.checkBox11.Text = "Non";
-            this.checkBox11.UseVisualStyleBackColor = true;
+            this.radioButton6.AutoSize = true;
+            this.radioButton6.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.radioButton6.Location = new System.Drawing.Point(89, 492);
+            this.radioButton6.Name = "radioButton6";
+            this.radioButton6.Size = new System.Drawing.Size(41, 17);
+            this.radioButton6.TabIndex = 24;
+            this.radioButton6.TabStop = true;
+            this.radioButton6.Text = "Oui";
+            this.radioButton6.UseVisualStyleBackColor = true;
             // 
-            // checkBox12
+            // radioButton3
             // 
-            this.checkBox12.AutoSize = true;
-            this.checkBox12.Font = new System.Drawing.Font("Noto Mono", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox12.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBox12.Location = new System.Drawing.Point(75, 504);
-            this.checkBox12.Name = "checkBox12";
-            this.checkBox12.Size = new System.Drawing.Size(50, 19);
-            this.checkBox12.TabIndex = 26;
-            this.checkBox12.Text = "Oui";
-            this.checkBox12.UseVisualStyleBackColor = true;
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.radioButton3.Location = new System.Drawing.Point(260, 302);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(45, 17);
+            this.radioButton3.TabIndex = 23;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "Non";
+            this.radioButton3.UseVisualStyleBackColor = true;
             // 
-            // checkBox7
+            // radioButton2
             // 
-            this.checkBox7.AutoSize = true;
-            this.checkBox7.Font = new System.Drawing.Font("Noto Mono", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBox7.Location = new System.Drawing.Point(342, 393);
-            this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(90, 19);
-            this.checkBox7.TabIndex = 25;
-            this.checkBox7.Text = "Les deux";
-            this.checkBox7.UseVisualStyleBackColor = true;
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.radioButton2.Location = new System.Drawing.Point(89, 302);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(41, 17);
+            this.radioButton2.TabIndex = 22;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "Oui";
+            this.radioButton2.UseVisualStyleBackColor = true;
             // 
-            // checkBox8
+            // radioButton4
             // 
-            this.checkBox8.AutoSize = true;
-            this.checkBox8.Font = new System.Drawing.Font("Noto Mono", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox8.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBox8.Location = new System.Drawing.Point(211, 393);
-            this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(50, 19);
-            this.checkBox8.TabIndex = 24;
-            this.checkBox8.Text = "Non";
-            this.checkBox8.UseVisualStyleBackColor = true;
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.radioButton4.Location = new System.Drawing.Point(260, 129);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(45, 17);
+            this.radioButton4.TabIndex = 21;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "Non";
+            this.radioButton4.UseVisualStyleBackColor = true;
             // 
-            // checkBox9
+            // radioButton1
             // 
-            this.checkBox9.AutoSize = true;
-            this.checkBox9.Font = new System.Drawing.Font("Noto Mono", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox9.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBox9.Location = new System.Drawing.Point(75, 393);
-            this.checkBox9.Name = "checkBox9";
-            this.checkBox9.Size = new System.Drawing.Size(50, 19);
-            this.checkBox9.TabIndex = 23;
-            this.checkBox9.Text = "Oui";
-            this.checkBox9.UseVisualStyleBackColor = true;
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Font = new System.Drawing.Font("Noto Mono", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBox4.Location = new System.Drawing.Point(342, 236);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(90, 19);
-            this.checkBox4.TabIndex = 22;
-            this.checkBox4.Text = "Les deux";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            // 
-            // checkBox5
-            // 
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.Font = new System.Drawing.Font("Noto Mono", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBox5.Location = new System.Drawing.Point(211, 236);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(50, 19);
-            this.checkBox5.TabIndex = 21;
-            this.checkBox5.Text = "Non";
-            this.checkBox5.UseVisualStyleBackColor = true;
-            // 
-            // checkBox6
-            // 
-            this.checkBox6.AutoSize = true;
-            this.checkBox6.Font = new System.Drawing.Font("Noto Mono", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBox6.Location = new System.Drawing.Point(75, 236);
-            this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(50, 19);
-            this.checkBox6.TabIndex = 20;
-            this.checkBox6.Text = "Oui";
-            this.checkBox6.UseVisualStyleBackColor = true;
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.radioButton1.Location = new System.Drawing.Point(89, 129);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(41, 17);
+            this.radioButton1.TabIndex = 20;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Oui";
+            this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
@@ -384,23 +324,12 @@ namespace projetSecuriteFinale
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label4.Location = new System.Drawing.Point(60, 437);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(329, 38);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "afficher les élèves\r\nayant oublié leur mot de passe ?";
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label3.Location = new System.Drawing.Point(56, 292);
+            this.label3.Location = new System.Drawing.Point(39, 393);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(309, 38);
             this.label3.TabIndex = 8;
@@ -411,48 +340,11 @@ namespace projetSecuriteFinale
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label2.Location = new System.Drawing.Point(56, 163);
+            this.label2.Location = new System.Drawing.Point(39, 207);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(399, 38);
             this.label2.TabIndex = 4;
             this.label2.Text = "afficher les élèves ayant un \r\nmot de passe s\'approchant de 55 jours ?";
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Font = new System.Drawing.Font("Noto Mono", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBox3.Location = new System.Drawing.Point(342, 110);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(90, 19);
-            this.checkBox3.TabIndex = 3;
-            this.checkBox3.Text = "Les deux";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Font = new System.Drawing.Font("Noto Mono", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBox2.Location = new System.Drawing.Point(211, 110);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(50, 19);
-            this.checkBox2.TabIndex = 2;
-            this.checkBox2.Text = "Non";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Font = new System.Drawing.Font("Noto Mono", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBox1.Location = new System.Drawing.Point(75, 110);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(50, 19);
-            this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "Oui";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // label1
             // 
@@ -497,27 +389,19 @@ namespace projetSecuriteFinale
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.RadioButton radioSupprimer;
-        private System.Windows.Forms.RadioButton radioChangerMDP;
         private System.Windows.Forms.RadioButton radioAvertissement;
         private System.Windows.Forms.RadioButton radioBloquerLogin;
         private System.Windows.Forms.ComboBox comboBoxEleves;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox checkBox10;
-        private System.Windows.Forms.CheckBox checkBox11;
-        private System.Windows.Forms.CheckBox checkBox12;
-        private System.Windows.Forms.CheckBox checkBox7;
-        private System.Windows.Forms.CheckBox checkBox8;
-        private System.Windows.Forms.CheckBox checkBox9;
-        private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.CheckBox checkBox5;
-        private System.Windows.Forms.CheckBox checkBox6;
+        private System.Windows.Forms.RadioButton radioButton6;
+        private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButton5;
     }
 }

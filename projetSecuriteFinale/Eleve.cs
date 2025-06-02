@@ -18,8 +18,11 @@ namespace projetSecuriteFinale
 
         public bool IsLoginBlocked { get; set; }
         public string MotDePasse { get; set; }
+        public string ResetToken { get; set; }
+        public DateTime? ResetTokenExpiration { get; set; }
 
 
+        public Eleve() { }
 
         public Eleve(int id, string nom, string prenom, DateTime dateNaissance, string codeClasse, string photoPath)
         {
@@ -29,6 +32,7 @@ namespace projetSecuriteFinale
             DateNaissance = dateNaissance;
             CodeClasse = codeClasse;
             PhotoPath = photoPath;
+
         }
     }
 

@@ -5,12 +5,12 @@ using MySql.Data.MySqlClient;
 
 namespace projetSecuriteFinale
 {
-    // La classe doit être publique ou interne, et elle contient la méthode
+    /// Classe responsable de la gestion des élèves (récupération, mise à jour, suppression).
     public class GestionEleves
     {
         private string connectionString = "Server=localhost;Database=gestion_securite;Uid=root;Pwd=;";
 
-        // Récupérer la liste des élèves selon le filtre
+        /// Récupère la liste des élèves en appliquant éventuellement des filtres sur la validité du mot de passe.
         public List<Eleve> GetEleves(List<string> filtres)
         {
             List<Eleve> listeEleves = new List<Eleve>();
@@ -21,13 +21,13 @@ namespace projetSecuriteFinale
                 {
                     conn.Open();
 
-                    string query = "SELECT id_utilisateur, nom, prenom, date_naissance, Code_classe FROM utilisateur WHERE role = 'eleve'";
+                    string query = "SELECT id_utilisateur, nom, prenom, email, date_naissance, Code_classe, photo_path " +
+                        "FROM utilisateur WHERE role = 'eleve'";
+
 
                     if (filtres != null && filtres.Count > 0)
                     {
-                        // Ajoute une condition combinée avec OR pour les différents filtres
                         query += " AND (";
-
                         List<string> conditions = new List<string>();
 
                         foreach (string filtre in filtres)
@@ -48,18 +48,16 @@ namespace projetSecuriteFinale
 
                     while (reader.Read())
                     {
-                        // Assigner correctement le chemin de la photo (photo_path) récupéré depuis la base de données
-                        string photoPath = reader["photo_path"] != DBNull.Value ? reader["photo_path"].ToString() : string.Empty;
-
-                        // Créer l'objet Eleve avec le chemin de la photo
                         Eleve eleve = new Eleve(
                             Convert.ToInt32(reader["id_utilisateur"]),
                             reader["nom"].ToString(),
                             reader["prenom"].ToString(),
                             Convert.ToDateTime(reader["date_naissance"]),
                             reader["Code_classe"].ToString(),
-                            photoPath // Photo path récupéré depuis la base de données
+                            reader["photo_path"] != DBNull.Value ? reader["photo_path"].ToString() : string.Empty
                         );
+
+                        eleve.Email = reader["email"].ToString(); 
 
                         listeEleves.Add(eleve);
                     }
@@ -73,6 +71,8 @@ namespace projetSecuriteFinale
 
             return listeEleves;
         }
+
+        /// Met à jour l’état de blocage et le mot de passe d’un élève.
         public void UpdateEleve(Eleve eleve)
         {
             try
@@ -98,6 +98,8 @@ namespace projetSecuriteFinale
                 throw new Exception("Erreur lors de la mise à jour de l'élève : " + ex.Message);
             }
         }
+
+        /// Supprime un élève de la base de données.
         public void SupprimerEleve(int id)
         {
             try
@@ -120,7 +122,5 @@ namespace projetSecuriteFinale
                 throw new Exception("Erreur lors de la suppression de l'élève : " + ex.Message);
             }
         }
-
-
     }
 }

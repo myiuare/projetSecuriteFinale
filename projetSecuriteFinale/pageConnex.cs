@@ -1,116 +1,134 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;  // Pour File.Exists
 
 namespace projetSecuriteFinale
 {
     public partial class pageConnex : Form
     {
-
-        Form pageDaccueil = new pageAccueil();
-        Form pageProf = new pageProfesseur();
-        Form pagElev = new pageEleve();
         public pageConnex()
         {
             InitializeComponent();
         }
 
+        // Fonction pour hasher le mot de passe en SHA256
+        public static string HashMotDePasse(string motDePasse)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(motDePasse);
+                byte[] hash = sha256.ComputeHash(bytes);
+                StringBuilder builder = new StringBuilder();
+                foreach (byte b in hash)
+                {
+                    builder.Append(b.ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+        
+
         private void buttonReChoix_Click(object sender, EventArgs e)
         {
-            this.Hide();  // Masque pageDeConnexion
-
-
+            this.Close(); // Ferme la fenêtre actuelle
         }
 
         private void buttonConnexion_Click(object sender, EventArgs e)
         {
-            string log = log_connex.Text;
-            string motDepass = mdp_connex.Text;
-            string roleSelectionne = ""; // "eleve" ou "professeur" selon le choix de l'utilisateur
-            if (rad_eleve.Checked)
+            string log = log_connex.Text.Trim();
+            string motDepass = mdp_connex.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(log) || string.IsNullOrWhiteSpace(motDepass))
             {
-                roleSelectionne = "eleve";
-            }
-            else if (rad_prof.Checked)
-            {
-                roleSelectionne = "professeur";
-            }else if (rad_admin.Checked)
-            {
-                roleSelectionne = "administrateur";
+                MessageBox.Show("Veuillez remplir tous les champs.", "Champs manquants", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-            // Connexion à la base de données MySQL
-            MySqlConnection utilisateur = new MySqlConnection("database=gestion_securite; server=localhost; user id=root; mdp=");
+            // Hash du mot de passe saisi
+            string motDepassHashe = HashMotDePasse(motDepass);
+
+            string connectionString = "server=localhost; database=gestion_securite; uid=root; pwd=";
 
             try
             {
-                utilisateur.Open();
-                // On va maintenant vérifier le rôle et les informations de connexion dans la base de données
-                string query = "SELECT * FROM utilisateur WHERE email = @email AND mot_de_passe = @mdp AND role = @role";
-                MySqlCommand cmd = new MySqlCommand(query, utilisateur);
-
-                cmd.Parameters.AddWithValue("@email", log);
-                cmd.Parameters.AddWithValue("@mdp", motDepass);
-                cmd.Parameters.AddWithValue("@role", roleSelectionne); // On passe le rôle sélectionné
-
-                MySqlDataReader recherche_connexion = cmd.ExecuteReader();
-
-                if (recherche_connexion.HasRows)
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    // Si l'utilisateur existe avec les bonnes informations et le bon rôle
-                    MessageBox.Show("Super " + log + " Vous êtes bien dans la base", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    recherche_connexion.Read();
+                    conn.Open();
 
-                    // Vérifier le rôle de l'utilisateur dans la base de données
-                    string roleUtilisateur = recherche_connexion["role"].ToString(); // Récupère le rôle
+                    string query = "SELECT * FROM utilisateur WHERE email = @email AND mot_de_passe = @mdp";
 
-                    // Selon le rôle de l'utilisateur, ouvrir la page correspondante
-                    if (roleUtilisateur == "eleve")
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@email", log);
+                    cmd.Parameters.AddWithValue("@mdp", motDepassHashe);
+
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
-                        pagElev.ShowDialog(); // Afficher la page Élève
-                    }
-                    else if (roleUtilisateur == "professeur")
-                    {
-                        pageProf.ShowDialog(); // Afficher la page Professeur
-                    }
-                else if (roleUtilisateur == "administrateur")
-                {
-                        pageDaccueil.ShowDialog(); // Afficher la page admin
-                }
+                        if (reader.Read())
+                        {
+                            string role = reader["role"].ToString();
 
-                this.Hide(); // Masquer la fenêtre actuelle (connexion)
-                utilisateur.Close();
-            }
-                else
-                {
-                    // Si l'utilisateur ne correspond pas à la base de données ou au rôle choisi
-                    MessageBox.Show("Erreur : l'utilisateur ou le rôle ne correspondent pas dans la base de données.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    utilisateur.Close();
-                }
+                            MessageBox.Show("Connexion réussie !", "Bienvenue", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                            this.Hide();
+
+                            if (role == "eleve")
+                            {
+                                Form pageEleve = new pageEleve();
+                                pageEleve.ShowDialog();
+                            }
+                            else if (role == "professeur")
+                            {
+                                Form pageProf = new pageProfesseur();
+                                pageProf.ShowDialog();
+                            }
+                            else if (role == "administrateur")
+                            {
+                                Form pageAdmin = new pageAccueil();
+                                pageAdmin.ShowDialog();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Rôle non reconnu. Veuillez contacter l’administrateur.", "Erreur rôle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+
+                            this.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Identifiants incorrects.", "Erreur de connexion", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
-                // Si une erreur de connexion à la base de données se produit
-                MessageBox.Show("Erreur de connexion : " + ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erreur de connexion à la base : " + ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void pageConnex_Load(object sender, EventArgs e)
         {
+        }
+
+        private void btnMigrate_Click(object sender, EventArgs e)
+        {
+            
+                MigratePasswords.UpdatePasswordsToHash();
+                MessageBox.Show("Migration terminée !");
+            
+        }
+
+        private void buttonReinitialiserMDP_Click(object sender, EventArgs e)
+        {
+            // Instancie le formulaire de réinitialisation
+            FormReinitialisation formReset = new FormReinitialisation();
+
+            // Affiche-le en modal (empêche d'interagir avec le formulaire parent tant que c'est ouvert)
+            formReset.ShowDialog();
 
         }
     }
 }
-
-
-
-
-

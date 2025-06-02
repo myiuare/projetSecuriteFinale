@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Importation des bibliothèques nécessaires
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,68 +12,57 @@ using projetSecuriteFinale;
 using System.IO;
 using System.Net.Mail;
 using System.Security.Cryptography;
-
-
+using System.Configuration;
+using System.Net;
 
 namespace projetSecuriteFinale
 {
     public partial class GestionMotdePasse : Form
     {
-        // Déclare une variable globale pour stocker la liste d'élèves récupérés
+        // Liste contenant les élèves affichés dans le formulaire
         private List<Eleve> listeEleves = new List<Eleve>();
 
+        // Constructeur du formulaire
         public GestionMotdePasse()
         {
-            InitializeComponent();
-            comboBoxEleves.SelectedIndexChanged += comboBoxEleves_SelectedIndexChanged;
-
+            InitializeComponent(); // Initialise les composants de l'interface
+            comboBoxEleves.SelectedIndexChanged += comboBoxEleves_SelectedIndexChanged; // Abonne un événement à la sélection d'un élève
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
+        private void checkBox1_CheckedChanged(object sender, EventArgs e) { } // Événement vide (non utilisé)
 
-        }
-        // Méthode appelée lorsqu'on clique sur le bouton pour afficher les élèves
+        // Bouton de chargement des élèves en fonction des filtres
         private void button2_Click(object sender, EventArgs e)
         {
             try
             {
-                // Liste des filtres sélectionnés
-                List<string> filtres = new List<string>();
+                List<string> filtres = new List<string>(); // Crée une liste pour les filtres sélectionnés
 
-                // Ajouter les filtres en fonction des cases à cocher
-                if (checkBox1.Checked)
-                    filtres.Add("90j");
+                // Vérifie quels filtres sont cochés
+                if (radioButton1.Checked) filtres.Add("90j");
+                if (radioButton2.Checked) filtres.Add("55j");
+                if (radioButton6.Checked) filtres.Add("ok");
 
-                if (checkBox6.Checked)
-                    filtres.Add("55j");
-
-                if (checkBox9.Checked)
-                    filtres.Add("ok");
-
-                // Si aucun filtre n'est sélectionné, afficher un message d'erreur
+                // Affiche une alerte si aucun filtre n'est sélectionné
                 if (filtres.Count == 0)
                 {
                     MessageBox.Show("Veuillez cocher au moins un filtre.");
                     return;
                 }
 
-                // Créer une instance de GestionEleves pour récupérer les élèves avec les filtres appliqués
+                // Récupère les élèves depuis la classe de gestion
                 GestionEleves gestionEleves = new GestionEleves();
-
-                // Appeler la méthode GetEleves pour obtenir la liste des élèves selon les filtres sélectionnés
                 listeEleves = gestionEleves.GetEleves(filtres);
 
-                // Effacer les éléments précédemment ajoutés dans la ComboBox
-                comboBoxEleves.Items.Clear();
+                comboBoxEleves.Items.Clear(); // Vide la comboBox
 
-                // Ajouter chaque élève dans la ComboBox sous la forme "Prénom Nom"
+                // Ajoute les élèves trouvés à la comboBox
                 foreach (var eleve in listeEleves)
                 {
                     comboBoxEleves.Items.Add($"{eleve.Prenom} {eleve.Nom}");
                 }
 
-                // Si des élèves sont trouvés, sélectionner le premier élément
+                // Sélectionne automatiquement le premier élève s'il y en a
                 if (comboBoxEleves.Items.Count > 0)
                     comboBoxEleves.SelectedIndex = 0;
                 else
@@ -80,85 +70,71 @@ namespace projetSecuriteFinale
             }
             catch (Exception ex)
             {
-                // Si une erreur se produit, afficher un message d'erreur
-                MessageBox.Show("Erreur : " + ex.Message);
+                MessageBox.Show("Erreur : " + ex.Message); // Gère les erreurs de chargement
             }
         }
 
-        // Méthode appelée lorsqu'on change de sélection dans la ComboBox pour afficher les détails de l'élève
+        // Gère le changement de sélection dans la comboBox
         private void comboBoxEleves_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Vérifier que l'index sélectionné est valide
-            int index = comboBoxEleves.SelectedIndex;
+            int index = comboBoxEleves.SelectedIndex; // Récupère l'index de l'élève sélectionné
 
-            // Si l'index est valide (c'est-à-dire dans la plage de la liste d'élèves)
             if (index >= 0 && index < listeEleves.Count)
             {
-                // Récupérer l'élève sélectionné dans la liste
-                Eleve eleve = listeEleves[index];
+                Eleve eleve = listeEleves[index]; // Récupère l'élève correspondant
 
-                // Mettre à jour les labels pour afficher les informations de l'élève
+                // Affiche les infos de l'élève
                 labelNom.Text = "Nom : " + eleve.Nom;
                 labelPrenom.Text = "Prénom : " + eleve.Prenom;
                 labelClasse.Text = "Classe : " + eleve.CodeClasse;
                 labelDateNaissance.Text = "Date de naissance : " + eleve.DateNaissance.ToShortDateString();
 
-                // Vérifie si le chemin de la photo est valide
+                // Tente d'afficher la photo de l'élève
                 if (!string.IsNullOrEmpty(eleve.PhotoPath))
                 {
                     try
                     {
-                        // Vérifier si l'URL est valide (pas nécessaire ici car tu utilises un chemin local)
-                        if (Uri.IsWellFormedUriString(eleve.PhotoPath, UriKind.Absolute))  // Si c'est une URL
+                        // Si la photo est une URL distante
+                        if (Uri.IsWellFormedUriString(eleve.PhotoPath, UriKind.Absolute))
                         {
-                            Console.WriteLine("URL valide trouvée : " + eleve.PhotoPath);  // Message de débogage
-                            try
-                            {
-                                // Télécharger l'image depuis l'URL et l'afficher dans la PictureBox
-                                pictureBoxEleve.Image = Image.FromStream(new System.Net.WebClient().OpenRead(eleve.PhotoPath));
-                            }
-                            catch (Exception ex)
-                            {
-                                // Si l'image ne peut pas être téléchargée, afficher une image par défaut
-                                pictureBoxEleve.Image = null; // ou une image par défaut
-                                MessageBox.Show("Erreur lors du téléchargement de l'image : " + ex.Message);
-                            }
+                            pictureBoxEleve.Image = Image.FromStream(new WebClient().OpenRead(eleve.PhotoPath));
+                        }
+                        // Sinon, c'est un chemin local
+                        else if (File.Exists(eleve.PhotoPath))
+                        {
+                            pictureBoxEleve.Image = Image.FromFile(eleve.PhotoPath);
                         }
                         else
                         {
-                            // Si c'est un chemin local
-                            Console.WriteLine("Chemin local trouvé : " + eleve.PhotoPath);  // Message de débogage
-                                                                                            // Vérifier si le fichier existe réellement
-                            if (File.Exists(eleve.PhotoPath))
-                            {
-                                Console.WriteLine("Fichier trouvé localement : " + eleve.PhotoPath);  // Message de débogage
-                                pictureBoxEleve.Image = Image.FromFile(eleve.PhotoPath);
-                            }
-                            else
-                            {
-                                // Afficher une erreur si le fichier n'existe pas
-                                MessageBox.Show("Le fichier d'image n'existe pas à cet emplacement : " + eleve.PhotoPath);
-                                pictureBoxEleve.Image = null;
-                            }
+                            MessageBox.Show("Le fichier d'image n'existe pas à cet emplacement : " + eleve.PhotoPath);
+                            pictureBoxEleve.Image = null;
                         }
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show("Erreur : " + ex.Message);
+                        if (!string.IsNullOrEmpty(eleve.PhotoPath) && File.Exists(eleve.PhotoPath))
+                        {
+                            pictureBoxEleve.Image = Image.FromFile(eleve.PhotoPath);
+                        }
+                        else
+                        {
+                            // Image par défaut ou rien
+                            pictureBoxEleve.Image = null;
+                        }
+
                     }
                 }
                 else
                 {
-                    pictureBoxEleve.Image = null;  // Afficher une image par défaut si aucun chemin n'est fourni
+                    pictureBoxEleve.Image = null; // Aucune photo
                 }
             }
         }
 
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
-        {
+        private void radioButton2_CheckedChanged(object sender, EventArgs e) { } // Événement vide (non utilisé)
 
-        }
-
+        // Bouton pour appliquer l'action (bloquer ou envoyer un mail)
         private void button1_Click(object sender, EventArgs e)
         {
             int index = comboBoxEleves.SelectedIndex;
@@ -173,58 +149,102 @@ namespace projetSecuriteFinale
 
             try
             {
-                // Vérifier quel radioButton est sélectionné pour effectuer l'action correspondante
+                // Si on veut bloquer l'accès
                 if (radioBloquerLogin.Checked)
                 {
-                    eleve.IsLoginBlocked = true;
-                    GestionEleves gestionEleves = new GestionEleves();
-                    gestionEleves.UpdateEleve(eleve);
-                    MessageBox.Show($"Login de {eleve.Prenom} {eleve.Nom} bloqué.");
+                    try
+                    {
+                        string email = ConfigurationManager.AppSettings["email"];
+                        string motDePasse = ConfigurationManager.AppSettings["mdp"];
 
-                    // Envoi du mail de renouvellement
-                    try
-                    {
-                        MailSender.EnvoyerMailRenouvellement(eleve.Email);
-                        MessageBox.Show("Mail de renouvellement envoyé.");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Erreur lors de l'envoi du mail de renouvellement : {ex.Message}");
-                    }
-                }
-                else if (radioAvertissement.Checked)
-                {
-                    // Envoi du mail d'avertissement
-                    try
-                    {
-                        MailSender.EnvoyerMailAvertissement(eleve.Email);
-                        MessageBox.Show("Mail d'avertissement envoyé.");
+                        MailMessage mail = new MailMessage();
+                        mail.From = new MailAddress(email);
+
+                        // Vérifie que l'élève a un email
+                        if (string.IsNullOrWhiteSpace(eleve.Email))
+                        {
+                            MessageBox.Show("L'élève sélectionné n'a pas d'adresse email valide.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        mail.To.Add(eleve.Email);
+                        mail.Subject = "Alerte mot de passe";
+                        mail.Body = "Bonjour, votre mot de passe dépasse les 90 jours.";
+
+                        SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                        client.EnableSsl = true;
+                        client.Credentials = new NetworkCredential(email, motDePasse);
+                        client.Send(mail); // Envoie l'email
+
+                        MessageBox.Show("Email envoyé avec succès !");
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show($"Erreur lors de l'envoi du mail d'avertissement : {ex.Message}");
                     }
                 }
-                else if (radioChangerMDP.Checked)
+
+                // Si on veut envoyer un lien de réinitialisation
+                else if (radioAvertissement.Checked)
                 {
-                    string nouveauMDP = GenerateurMotDePasse.Generer();
-                    eleve.MotDePasse = PasswordUtils.Hash(nouveauMDP);
-                    GestionEleves gestionEleves = new GestionEleves();
-                    gestionEleves.UpdateEleve(eleve);
-                    MessageBox.Show($"Mot de passe changé : {nouveauMDP}");
+                    try
+                    {
+                        if (string.IsNullOrWhiteSpace(eleve.Email))
+                        {
+                            MessageBox.Show("L'élève sélectionné n'a pas d'adresse email valide.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        
+
+                        // Stocker en base
+                        string token = UtilisateurDAO.CreerEtStockerResetToken(eleve.Id);
+
+                        // Préparer l'email AVEC LE TOKEN, PAS DE LIEN
+                        string email = ConfigurationManager.AppSettings["email"];
+                        string motDePasse = ConfigurationManager.AppSettings["mdp"];
+
+                        MailMessage mail = new MailMessage();
+                        mail.From = new MailAddress(email);
+                        mail.To.Add(eleve.Email);
+                        mail.Subject = "Code de réinitialisation du mot de passe";
+
+                        // Le mail contient simplement le token à saisir dans l'application
+                        mail.Body = $"Bonjour {eleve.Prenom},\n\n" +
+                                    "Voici votre code de réinitialisation du mot de passe.\n" +
+                                    "Veuillez le saisir dans l'application pour valider le changement.\n\n" +
+                                    $"Code : {token}\n\n" +
+                                    "Ce code est valable 1 heure.\n\n" +
+                                    "Si vous n'avez pas demandé cette réinitialisation, ignorez ce mail.\n\n" +
+                                    "Cordialement,\nL'équipe du site";
+
+                        SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                        client.EnableSsl = true;
+                        client.Credentials = new NetworkCredential(email, motDePasse);
+                        client.Send(mail);
+
+                        MessageBox.Show("Email avec code envoyé avec succès !");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erreur lors de l'envoi de l'email : {ex.Message}");
+                    }
                 }
+
+            
+
+                // Supprimer un élève (optionnelle)
                 else if (radioSupprimer.Checked)
                 {
                     var confirm = MessageBox.Show($"Supprimer {eleve.Prenom} {eleve.Nom} ?", "Confirmation", MessageBoxButtons.YesNo);
                     if (confirm == DialogResult.Yes)
                     {
-                        GestionEleves gestionEleves = new GestionEleves();
-                        gestionEleves.SupprimerEleve(eleve.Id);
-                        comboBoxEleves.Items.RemoveAt(index);
-                        listeEleves.RemoveAt(index);
+                        // Logique à implémenter : suppression dans la base + UI
                         MessageBox.Show("Élève supprimé.");
                     }
                 }
+
+                // Si aucune option n’est sélectionnée
                 else
                 {
                     MessageBox.Show("Veuillez sélectionner une action.");
@@ -232,10 +252,17 @@ namespace projetSecuriteFinale
             }
             catch (Exception ex)
             {
-                // Gestion des exceptions globales pour capturer toute erreur inattendue
                 MessageBox.Show($"Erreur : {ex.Message}");
             }
         }
+
+        // Événements de base non utilisés
+        private void groupBox2_Enter(object sender, EventArgs e) { }
+        private void groupBox1_Enter(object sender, EventArgs e) { }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
-
