@@ -74,7 +74,6 @@ namespace projetSecuriteFinale
             this.groupBox2.Size = new System.Drawing.Size(625, 626);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // groupBox3
             // 
@@ -83,7 +82,7 @@ namespace projetSecuriteFinale
             this.groupBox3.Controls.Add(this.labelPrenom);
             this.groupBox3.Controls.Add(this.labelNom);
             this.groupBox3.Controls.Add(this.pictureBoxEleve);
-            this.groupBox3.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox3.Location = new System.Drawing.Point(91, 109);
             this.groupBox3.Name = "groupBox3";
@@ -95,40 +94,41 @@ namespace projetSecuriteFinale
             // labelClasse
             // 
             this.labelClasse.AutoSize = true;
-            this.labelClasse.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelClasse.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelClasse.Location = new System.Drawing.Point(39, 124);
             this.labelClasse.Name = "labelClasse";
-            this.labelClasse.Size = new System.Drawing.Size(69, 19);
+            this.labelClasse.Size = new System.Drawing.Size(57, 20);
             this.labelClasse.TabIndex = 5;
             this.labelClasse.Text = "Classe";
+            this.labelClasse.Click += new System.EventHandler(this.labelClasse_Click);
             // 
             // labelDateNaissance
             // 
             this.labelDateNaissance.AutoSize = true;
-            this.labelDateNaissance.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDateNaissance.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelDateNaissance.Location = new System.Drawing.Point(39, 97);
             this.labelDateNaissance.Name = "labelDateNaissance";
-            this.labelDateNaissance.Size = new System.Drawing.Size(39, 19);
+            this.labelDateNaissance.Size = new System.Drawing.Size(36, 20);
             this.labelDateNaissance.TabIndex = 3;
             this.labelDateNaissance.Text = "age";
             // 
             // labelPrenom
             // 
             this.labelPrenom.AutoSize = true;
-            this.labelPrenom.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPrenom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPrenom.Location = new System.Drawing.Point(39, 72);
             this.labelPrenom.Name = "labelPrenom";
-            this.labelPrenom.Size = new System.Drawing.Size(69, 19);
+            this.labelPrenom.Size = new System.Drawing.Size(63, 20);
             this.labelPrenom.TabIndex = 2;
             this.labelPrenom.Text = "prénom";
             // 
             // labelNom
             // 
             this.labelNom.AutoSize = true;
-            this.labelNom.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelNom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelNom.Location = new System.Drawing.Point(39, 43);
             this.labelNom.Name = "labelNom";
-            this.labelNom.Size = new System.Drawing.Size(39, 19);
+            this.labelNom.Size = new System.Drawing.Size(42, 20);
             this.labelNom.TabIndex = 1;
             this.labelNom.Text = "Nom";
             // 
@@ -145,7 +145,7 @@ namespace projetSecuriteFinale
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.Indigo;
-            this.button3.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.button3.Location = new System.Drawing.Point(490, 579);
             this.button3.Name = "button3";
@@ -158,7 +158,7 @@ namespace projetSecuriteFinale
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.Indigo;
-            this.button1.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.button1.Location = new System.Drawing.Point(360, 580);
             this.button1.Name = "button1";
@@ -171,11 +171,11 @@ namespace projetSecuriteFinale
             // radioSupprimer
             // 
             this.radioSupprimer.AutoSize = true;
-            this.radioSupprimer.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioSupprimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioSupprimer.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.radioSupprimer.Location = new System.Drawing.Point(28, 398);
             this.radioSupprimer.Name = "radioSupprimer";
-            this.radioSupprimer.Size = new System.Drawing.Size(347, 23);
+            this.radioSupprimer.Size = new System.Drawing.Size(270, 24);
             this.radioSupprimer.TabIndex = 4;
             this.radioSupprimer.TabStop = true;
             this.radioSupprimer.Text = "Supprimer de la base de donnée ?\r\n";
@@ -184,25 +184,24 @@ namespace projetSecuriteFinale
             // radioAvertissement
             // 
             this.radioAvertissement.AutoSize = true;
-            this.radioAvertissement.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioAvertissement.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioAvertissement.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.radioAvertissement.Location = new System.Drawing.Point(28, 369);
             this.radioAvertissement.Name = "radioAvertissement";
-            this.radioAvertissement.Size = new System.Drawing.Size(587, 23);
+            this.radioAvertissement.Size = new System.Drawing.Size(439, 24);
             this.radioAvertissement.TabIndex = 2;
             this.radioAvertissement.TabStop = true;
             this.radioAvertissement.Text = "Envoyer un mail d\'avertissement de mot de passe ancien ?\r\n";
             this.radioAvertissement.UseVisualStyleBackColor = true;
-            this.radioAvertissement.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // radioBloquerLogin
             // 
             this.radioBloquerLogin.AutoSize = true;
-            this.radioBloquerLogin.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioBloquerLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioBloquerLogin.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.radioBloquerLogin.Location = new System.Drawing.Point(28, 343);
             this.radioBloquerLogin.Name = "radioBloquerLogin";
-            this.radioBloquerLogin.Size = new System.Drawing.Size(567, 23);
+            this.radioBloquerLogin.Size = new System.Drawing.Size(410, 24);
             this.radioBloquerLogin.TabIndex = 1;
             this.radioBloquerLogin.TabStop = true;
             this.radioBloquerLogin.Text = "Bloquer le login et envoyer un mail de renouvelement ?";
@@ -210,14 +209,13 @@ namespace projetSecuriteFinale
             // 
             // comboBoxEleves
             // 
-            this.comboBoxEleves.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxEleves.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxEleves.FormattingEnabled = true;
             this.comboBoxEleves.Location = new System.Drawing.Point(28, 39);
             this.comboBoxEleves.Name = "comboBoxEleves";
-            this.comboBoxEleves.Size = new System.Drawing.Size(143, 27);
+            this.comboBoxEleves.Size = new System.Drawing.Size(143, 28);
             this.comboBoxEleves.TabIndex = 0;
             this.comboBoxEleves.Text = "élèves";
-            this.comboBoxEleves.SelectedIndexChanged += new System.EventHandler(this.comboBoxEleves_SelectedIndexChanged);
             // 
             // groupBox1
             // 
@@ -237,7 +235,6 @@ namespace projetSecuriteFinale
             this.groupBox1.Size = new System.Drawing.Size(540, 626);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // radioButton5
             // 
@@ -314,7 +311,7 @@ namespace projetSecuriteFinale
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.Indigo;
-            this.button2.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.button2.Location = new System.Drawing.Point(101, 564);
             this.button2.Name = "button2";
@@ -327,33 +324,33 @@ namespace projetSecuriteFinale
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label3.Location = new System.Drawing.Point(39, 393);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(309, 38);
+            this.label3.Size = new System.Drawing.Size(230, 40);
             this.label3.TabIndex = 8;
             this.label3.Text = "afficher les élèves\r\nn\'ayant aucun de ces soucies ?";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label2.Location = new System.Drawing.Point(39, 207);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(399, 38);
+            this.label2.Size = new System.Drawing.Size(296, 40);
             this.label2.TabIndex = 4;
             this.label2.Text = "afficher les élèves ayant un \r\nmot de passe s\'approchant de 55 jours ?";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Noto Mono", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.label1.Location = new System.Drawing.Point(56, 39);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(349, 38);
+            this.label1.Size = new System.Drawing.Size(255, 40);
             this.label1.TabIndex = 0;
             this.label1.Text = "Afficher les élèves ayant un \r\nmot de passe de plus de 90 jours ?\r\n";
             // 

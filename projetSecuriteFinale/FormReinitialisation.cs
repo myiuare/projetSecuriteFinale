@@ -68,7 +68,7 @@ namespace projetSecuriteFinale
             string sel = UtilsMotDePasse.GenererSel();
 
             // Hash le mot de passe combiné avec le sel (algorithme SHA256 ou autre)
-            string hash = UtilsMotDePasse.HashMotDePasse(nouveauMdp, sel);
+            string hash = UtilsMotDePasse.        HasherAvecSel(nouveauMdp, sel);
 
             // Met à jour le mot de passe haché et le sel en base, avec date de modification et expiration
             UtilisateurDAO.MettreAJourMotDePasse(utilisateur.Id, hash, sel);

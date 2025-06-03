@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace projetSecuriteFinale
 {
@@ -13,41 +10,52 @@ namespace projetSecuriteFinale
     {
         public static void EnvoyerMail(string destinataire, string sujet, string corps)
         {
-            string email = ConfigurationManager.AppSettings["email"];
-            string motDePasse = ConfigurationManager.AppSettings["mdp"];
+            string emailExpediteur = ConfigurationManager.AppSettings["email"]?.Trim();
+            string motDePasse = ConfigurationManager.AppSettings["mdp"]?.Trim();
 
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(motDePasse))
-                throw new Exception("Email expéditeur ou mot de passe manquant dans App.config");
+            // Debug rapide
+            MessageBox.Show("Email lu depuis App.config : " + emailExpediteur);
+            MessageBox.Show("Mot de passe lu : " + (motDePasse?.Length > 0 ? "[OK]" : "[VIDE]"));
 
             if (string.IsNullOrWhiteSpace(destinataire))
-                throw new ArgumentNullException(nameof(destinataire), "L'adresse du destinataire ne peut pas être vide.");
-
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress(email);
-            mail.To.Add(destinataire);
-            mail.Subject = sujet;
-            mail.Body = corps;
-
-            using (SmtpClient client = new SmtpClient("smtp.gmail.com", 587))
             {
-                client.EnableSsl = true;
-                client.Credentials = new NetworkCredential(email, motDePasse);
-                client.Timeout = 10000; // timeout 10s
+                MessageBox.Show("Erreur : email du destinataire vide ou null");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(emailExpediteur))
+            {
+                MessageBox.Show("Erreur : email expéditeur manquant dans App.config");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(motDePasse))
+            {
+                MessageBox.Show("Erreur : mot de passe manquant dans App.config");
+                return;
+            }
 
-                try
+            try
+            {
+                MailMessage mail = new MailMessage
                 {
+                    From = new MailAddress(emailExpediteur),
+                    Subject = sujet,
+                    Body = corps
+                };
+                mail.To.Add(destinataire);
+
+                using (SmtpClient client = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    client.EnableSsl = true;
+                    client.Credentials = new NetworkCredential(emailExpediteur, motDePasse);
                     client.Send(mail);
                 }
-                catch (SmtpException smtpEx)
-                {
-                    throw new Exception($"Erreur SMTP: {smtpEx.StatusCode} - {smtpEx.Message}", smtpEx);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Erreur lors de l'envoi du mail : {ex.Message}", ex);
-                }
+
+                MessageBox.Show("Email envoyé avec succès !");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur lors de l'envoi de l'email : " + ex.Message);
             }
         }
-
     }
 }

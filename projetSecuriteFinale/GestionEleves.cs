@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
 namespace projetSecuriteFinale
@@ -22,8 +23,7 @@ namespace projetSecuriteFinale
                     conn.Open();
 
                     string query = "SELECT id_utilisateur, nom, prenom, email, date_naissance, Code_classe, photo_path " +
-                        "FROM utilisateur WHERE role = 'eleve'";
-
+     "FROM utilisateur WHERE role = 'eleve'";
 
                     if (filtres != null && filtres.Count > 0)
                     {
@@ -37,11 +37,12 @@ namespace projetSecuriteFinale
                             else if (filtre == "55j")
                                 conditions.Add("DATEDIFF(NOW(), dernier_changement_mdp) BETWEEN 50 AND 55");
                             else if (filtre == "ok")
-                                conditions.Add("DATEDIFF(NOW(), dernier_changement_mdp) <= 50");
+                                conditions.Add("dernier_changement_mdp IS NULL OR DATEDIFF(NOW(), dernier_changement_mdp) <= 50");
                         }
 
-                        query += string.Join(" OR ", conditions) + ")";
+                            query += string.Join(" OR ", conditions) + ")";
                     }
+
 
                     MySqlCommand cmd = new MySqlCommand(query, conn);
                     MySqlDataReader reader = cmd.ExecuteReader();
@@ -57,7 +58,7 @@ namespace projetSecuriteFinale
                             reader["photo_path"] != DBNull.Value ? reader["photo_path"].ToString() : string.Empty
                         );
 
-                        eleve.Email = reader["email"].ToString(); 
+                        eleve.Email = reader["email"] != DBNull.Value ? reader["email"].ToString() : string.Empty;
 
                         listeEleves.Add(eleve);
                     }
@@ -122,5 +123,53 @@ namespace projetSecuriteFinale
                 throw new Exception("Erreur lors de la suppression de l'élève : " + ex.Message);
             }
         }
+            public static bool VerifierConnexion(string email, string motDePasse, out string role)
+            {
+           
+                role = null;
+
+                using (MySqlConnection conn = new MySqlConnection("server=localhost; database=gestion_securite; uid=root; pwd="))
+                {
+                    conn.Open();
+
+                string sql = "SELECT mot_de_passe, sel, role FROM utilisateur WHERE LOWER(email) = @mail AND is_active = 1";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@mail", email.ToLower());
+
+                using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string hashEnBase = reader["mot_de_passe"].ToString();
+                            string sel = reader["sel"].ToString();
+
+                            string hashEntre = UtilsMotDePasse.HasherAvecSel(motDePasse, sel);
+
+                            MessageBox.Show($"Hash BDD: {hashEnBase}\nHash saisi: {hashEntre}\nSel: {sel}");
+
+                            if (hashEnBase == hashEntre)
+                            {
+                                role = reader["role"].ToString();
+                                return true;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Mot de passe incorrect.");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Utilisateur non trouvé ou inactif.");
+                        }
+                    }
+                }
+                return false;
+            
+
+        }
+
+            
+        }
     }
-}
+
+

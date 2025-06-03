@@ -76,7 +76,6 @@ namespace projetSecuriteFinale
             this.mdp_connex.Name = "mdp_connex";
             this.mdp_connex.Size = new System.Drawing.Size(173, 26);
             this.mdp_connex.TabIndex = 49;
-            this.mdp_connex.TextChanged += new System.EventHandler(this.mdp_connex_TextChanged);
             // 
             // log_connex
             // 
@@ -144,7 +143,6 @@ namespace projetSecuriteFinale
             this.buttonReinitialiserMDP.TabIndex = 57;
             this.buttonReinitialiserMDP.Text = "Reinitialiser Mot De Passe";
             this.buttonReinitialiserMDP.UseVisualStyleBackColor = true;
-            this.buttonReinitialiserMDP.Click += new System.EventHandler(this.buttonReinitialiserMDP_Click);
             // 
             // pageConnex
             // 

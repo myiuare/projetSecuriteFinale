@@ -49,7 +49,7 @@ public class MigratePasswords
             foreach (var user in utilisateurs)
             {
                 string sel = UtilsMotDePasse.GenererSel(); // Génère un sel aléatoire
-                string hash = UtilsMotDePasse.HashMotDePasse(user.mdp, sel); // SHA256(mdp + sel)
+                string hash = UtilsMotDePasse.HasherAvecSel(user.mdp, sel); // SHA256(mdp + sel)
 
                 string updateQuery = "UPDATE utilisateur SET mot_de_passe = @hash, sel = @sel WHERE id_utilisateur = @id";
                 MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn);
